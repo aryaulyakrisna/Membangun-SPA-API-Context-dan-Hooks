@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import "tailwindcss";
+@plugin "daisyui";
+
+#root {
+  font-family: "Open Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  @apply w-full flex flex-col items-center;
+}
+
+main, input, label, .textarea {
+  @apply bg-primary/0;
+}
+
+html, body, #root, main, input, label, .textarea {
+  transition-property: background-color;
+  transition-duration: 750ms;
+}
+
+
+button {
+  @apply cursor-pointer;
+}
+
+p,
+.as-p,
+a span,
+input,
+.input,
+textarea,
+.textarea,
+button,
+.btn {
+  @apply max-sm:text-xs rounded-none;
+}
+
+.btn {
+  @apply active:translate-0 active:opacity-75 transition-all duration-150 border-none;
+}
+
+.btn-error,
+.btn-neutral {
+  @apply hover:opacity-90;
+}
+
+[contenteditable]:empty:before {
+  content: attr(data-placeholder);
+}
+
+@layer components {
+  [data-status="light"] .btn-card-error {
+    @apply btn-outline text-error-content;
+  }
+
+  [data-status="light"] .btn-card-success {
+    @apply btn-outline text-success-content;
+  }
+
+  [data-status="light"] .btn-card-neutral {
+    @apply btn-outline hover:text-neutral-content;
+  }
+}
+
+.btn-icon {
+  @apply hover:scale-105 active:scale-100 active:opacity-90 font-bold textarea-xl block cursor-pointer max-sm:textarea-lg;
+}
+
+.btn-link {
+  @apply hover:scale-105 active:scale-100 active:opacity-90 font-bold no-underline block text-sm;
+}
+
+.btn-side {
+  @apply p-2 px-4 rounded-md hover:bg-neutral/30 active:bg-black/30 transition-all duration-300 w-full font-semibold cursor-pointer textarea-md max-sm:textarea-sm;
+}
