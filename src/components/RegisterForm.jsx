@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useLang from "../hooks/useLang";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [registerSuccess, setRegisterSuccces] = useState(false);
+  const [openPassword, setOpenPassword] = useState(false);
 
   const isID = lang === "ID";
 
@@ -27,11 +28,8 @@ const RegisterForm = () => {
     reset,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const passwordRef = useRef(null);
   const togglePassword = () => {
-    passwordRef.current.type === "password"
-      ? (passwordRef.current.type = "text")
-      : (passwordRef.current.type = "password");
+    setOpenPassword(!openPassword);
   };
 
   const handleRegister = async (data) => {
@@ -47,7 +45,6 @@ const RegisterForm = () => {
         const response = await apiClient.request("/register", requestConfig);
         if (response.status === 201) {
           setRegisterSuccces(true);
-          console.log(requestConfig);
         }
       } catch (err) {
         setError(err.message);
@@ -56,11 +53,10 @@ const RegisterForm = () => {
         reset();
       }
     } else {
-      console.log(errors);
+      console.error(errors);
     }
   };
 
-  
   return (
     <>
       <section className="p-8 border-neutral border-2 max-w-xl mx-auto">
@@ -127,7 +123,7 @@ const RegisterForm = () => {
 
           <label className="input validator input-neutral w-full">
             <svg
-              className="h-[1em] opacity-50"
+              className="h-[1em] opacity-50 cursor-pointer"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               onClick={togglePassword}
@@ -144,8 +140,7 @@ const RegisterForm = () => {
               </g>
             </svg>
             <input
-              type="password"
-              ref={passwordRef}
+              type={openPassword? "text" : "password"}
               placeholder="Password"
               required
               minLength="8"
@@ -167,8 +162,24 @@ const RegisterForm = () => {
         </form>
       </section>
 
-      <Alert setDisplayed={setRegisterSuccces} displayed={registerSuccess} type={"success"} message={isID? "Sukses, akun Anda terdaftar" : "Your account has been registered"}/>
-      <Alert setDisplayed={setError} displayed={error} type={"error"} message={isID? "Gagal membuat akun" : "Failed, cannot register your account"}/>
+      <Alert
+        setDisplayed={setRegisterSuccces}
+        displayed={registerSuccess}
+        type={"success"}
+        message={
+          isID
+            ? "Sukses, akun Anda terdaftar"
+            : "Your account has been registered"
+        }
+      />
+      <Alert
+        setDisplayed={setError}
+        displayed={error}
+        type={"error"}
+        message={
+          isID ? "Gagal membuat akun" : "Failed, cannot register your account"
+        }
+      />
     </>
   );
 };

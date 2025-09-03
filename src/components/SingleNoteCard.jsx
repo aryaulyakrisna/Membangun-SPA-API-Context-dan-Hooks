@@ -42,7 +42,6 @@ const SingleNoteCard = () => {
         );
 
         setNote(data.data);
-        console.log(data.data);
       } catch (err) {
         setError(err.message);
       }

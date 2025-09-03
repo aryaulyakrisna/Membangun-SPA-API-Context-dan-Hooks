@@ -35,7 +35,6 @@ const AddNoteForm = ({ changeDeps }) => {
 
     try {
       const res = await apiClient.request("/notes", requestConfig);
-      console.log(res);
       if (res.status === 201) {
         changeDeps();
       }

@@ -9,10 +9,6 @@ const DeleteConfirmation = ({ changeDeps }) => {
   const { lang } = useLang();
   const isID = lang === "ID";
 
-  useEffect(() => {
-    console.log(displayed);
-  }, [displayed]);
-
   if (!displayed) return "";
 
   return (

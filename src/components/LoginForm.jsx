@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useLang from "../hooks/useLang";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState();
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [openPassword, setOpenPassword] = useState(false);
 
   const {
     register,
@@ -31,11 +32,8 @@ const LoginForm = () => {
 
   const isID = lang === "ID";
 
-  const passwordRef = useRef(null);
   const togglePassword = () => {
-    passwordRef.current.type === "password"
-      ? (passwordRef.current.type = "text")
-      : (passwordRef.current.type = "password");
+    setOpenPassword(!openPassword);
   };
 
   const handleLogin = async (data) => {
@@ -45,8 +43,6 @@ const LoginForm = () => {
       method: "POST",
       data,
     };
-
-    console.log(requestConfig);
 
     if (isValid) {
       try {
@@ -66,7 +62,7 @@ const LoginForm = () => {
         reset();
       }
     } else {
-      console.log(errors);
+      console.error(errors);
     }
   };
 
@@ -81,7 +77,7 @@ const LoginForm = () => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleLogin)}
         >
-          <label className="input validator input-neutral w-full">
+          <label className="input input-neutral w-full">
             <svg
               className="h-[1em] opacity-50"
               xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +101,7 @@ const LoginForm = () => {
               {...register("email")}
             />
           </label>
-          <label className="input validator input-neutral w-full">
+          <label className="input input-neutral w-full cursor-pointer">
             <svg
               className="h-[1em] opacity-50"
               xmlns="http://www.w3.org/2000/svg"
@@ -124,13 +120,10 @@ const LoginForm = () => {
               </g>
             </svg>
             <input
-              ref={passwordRef}
-              type="password"
+              type={openPassword ? "text" : "password"}
               required
               placeholder="Password"
               minLength="8"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
               {...register("password")}
             />
           </label>
@@ -146,7 +139,12 @@ const LoginForm = () => {
         </form>
       </section>
 
-      <Alert displayed={error} type={"error"} setDisplayed={setError} message={isID? "Gagal masuk" : "Failed to sign in"}/>
+      <Alert
+        displayed={error}
+        type={"error"}
+        setDisplayed={setError}
+        message={isID ? "Gagal masuk" : "Failed to sign in"}
+      />
     </>
   );
 };
